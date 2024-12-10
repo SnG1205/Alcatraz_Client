@@ -1,6 +1,5 @@
 package com.example.alcatraz_client.game.gui;
 
-import com.example.alcatraz_client.PortFetcher;
 import com.example.alcatraz_client.data.Client;
 import com.example.alcatraz_client.rest.Caller;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -14,7 +13,7 @@ import java.awt.event.MouseEvent;
 @Component
 public class AlcatrazGui {
 
-    public static void drawBoard(PortFetcher portFetcher) {
+    public static void drawBoard(int port) {
         Caller caller = new Caller();
         // Hauptfenster erstellen
         JFrame frame = new JFrame("Escape from Alcatraz");
@@ -125,8 +124,8 @@ public class AlcatrazGui {
         createLobbyButton.addActionListener(e -> {
             String username = usernameField.getText();
             try {
-                caller.createLobby(new Client(usernameField.getText(), Integer.parseInt(portFetcher.getPort())), 8080, Integer.parseInt(amountField.getText()));
-            } catch (JsonProcessingException ex) {
+                caller.createLobby(new Client(usernameField.getText(), port), 8080, Integer.parseInt(amountField.getText()));
+            } catch (JsonProcessingException ex) { //Integer.parseInt(portFetcher.getPort())
                 throw new RuntimeException(ex);
             }
             System.out.println("Lobby created by: " + username);
@@ -139,7 +138,7 @@ public class AlcatrazGui {
         joinLobbyButton.addActionListener(e -> {
             String username = usernameField.getText();
             try {
-                caller.joinLobby(new Client(usernameField.getText(), Integer.parseInt(portFetcher.getPort())), 8080);
+                caller.joinLobby(new Client(usernameField.getText(), port), 8080);
             } catch (JsonProcessingException ex) {
                 throw new RuntimeException(ex);
             }
@@ -151,7 +150,7 @@ public class AlcatrazGui {
 
         startGameButton.addActionListener(e -> {
             try {
-                caller.startGame(new Client(usernameField.getText(), Integer.parseInt(portFetcher.getPort())), 8080);
+                caller.startGame(new Client(usernameField.getText(), port), 8080);
             } catch (JsonProcessingException ex) {
                 throw new RuntimeException(ex);
             }
@@ -160,7 +159,7 @@ public class AlcatrazGui {
 
         leaveLobbyButton.addActionListener(e -> {
             try {
-                caller.leaveLobby(new Client(usernameField.getText(), Integer.parseInt(portFetcher.getPort())), 8080);
+                caller.leaveLobby(new Client(usernameField.getText(), port), 8080);
             } catch (JsonProcessingException ex) {
                 throw new RuntimeException(ex);
             }
