@@ -42,7 +42,8 @@ public class AlcatrazLogic  {
 
     public void makeMove(RestMove move) {
         try{
-            a.doMove(a.getPlayer(move.getPlayerId()), a.getPrisoner(move.getPrisonerId()), move.getRowOrCol(), move.getRow(), move.getCol());
+            int playerId = move.getPlayerId();
+            a.doMove(a.getPlayer(playerId), a.getPrisoner(move.getPrisonerId() + 4*playerId), move.getRowOrCol(), move.getRow(), move.getCol());
             System.out.println("Player" + a.getPlayer(move.getPlayerId()).getName() + "is" + "moving " + a.getPrisoner(move.getPrisonerId()));
         }
         catch (IllegalMoveException e) {
