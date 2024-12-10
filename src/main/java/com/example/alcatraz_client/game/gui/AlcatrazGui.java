@@ -1,5 +1,6 @@
 package com.example.alcatraz_client.game.gui;
 
+import com.example.alcatraz_client.PortFetcher;
 import com.example.alcatraz_client.data.Client;
 import com.example.alcatraz_client.rest.Caller;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -13,8 +14,7 @@ import java.awt.event.MouseEvent;
 @Component
 public class AlcatrazGui {
 
-    public static void main(String[] args) {
-        int TEMPORARY_PORT = 3455;
+    public static void drawBoard(PortFetcher portFetcher) {
         Caller caller = new Caller();
         // Hauptfenster erstellen
         JFrame frame = new JFrame("Escape from Alcatraz");
@@ -45,8 +45,15 @@ public class AlcatrazGui {
         usernameLabel.setFont(new Font("Arial", Font.PLAIN, 16));
         usernameLabel.setForeground(Color.lightGray);
 
+        JLabel amountLabel = new JLabel("Enter Amount:");
+        amountLabel.setFont(new Font("Arial", Font.PLAIN, 16));
+        amountLabel.setForeground(Color.lightGray);
+
         JTextField usernameField = new JTextField(15); // Textfeld mit fester Breite
         usernameField.setFont(new Font("Arial", Font.PLAIN, 14));
+
+        JTextField amountField = new JTextField(15); // Textfeld mit fester Breite
+        amountField.setFont(new Font("Arial", Font.PLAIN, 14));
 
         JButton createLobbyButton = new JButton("Create Lobby");
         customizeButton(createLobbyButton);
@@ -60,7 +67,7 @@ public class AlcatrazGui {
 
         JButton leaveLobbyButton = new JButton("Leave Lobby");
         customizeButton(leaveLobbyButton);
-        //leaveLobbyButton.setVisible(false);
+        leaveLobbyButton.setVisible(false);
 
         // Komponenten zum Panel hinzufügen
         gbc.gridx = 0;
@@ -71,23 +78,32 @@ public class AlcatrazGui {
         gbc.gridy = 0; // Erste Zeile, zweite Spalte
         mainPanel.add(usernameField, gbc);
 
+        // Komponenten zum Panel hinzufügen
         gbc.gridx = 0;
-        gbc.gridy = 1;
+        gbc.gridy = 1; // Erste Zeile
+        mainPanel.add(amountLabel, gbc);
+
+        gbc.gridx = 1;
+        gbc.gridy = 1; // Erste Zeile, zweite Spalte
+        mainPanel.add(amountField, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 2;
         gbc.gridwidth = 2; // Zweite Zeile, beide Spalten
         mainPanel.add(createLobbyButton, gbc);
 
         gbc.gridx = 0;
-        gbc.gridy = 2;
+        gbc.gridy = 3;
         gbc.gridwidth = 2; // Dritte Zeile, beide Spalten
         mainPanel.add(joinLobbyButton, gbc);
 
         gbc.gridx = 0;
-        gbc.gridy = 3;
+        gbc.gridy = 4;
         gbc.gridwidth = 2; // Vierte Zeile, beide Spalten
         mainPanel.add(startGameButton, gbc);
 
         gbc.gridx = 0;
-        gbc.gridy = 4;
+        gbc.gridy = 5;
         gbc.gridwidth = 2; // Vierte Zeile, beide Spalten
         mainPanel.add(leaveLobbyButton, gbc);
 
@@ -109,33 +125,33 @@ public class AlcatrazGui {
         createLobbyButton.addActionListener(e -> {
             String username = usernameField.getText();
             try {
-                caller.createLobby(new Client(usernameField.getText(), TEMPORARY_PORT), 8080, 3);
+                caller.createLobby(new Client(usernameField.getText(), Integer.parseInt(portFetcher.getPort())), 8080, Integer.parseInt(amountField.getText()));
             } catch (JsonProcessingException ex) {
                 throw new RuntimeException(ex);
             }
             System.out.println("Lobby created by: " + username);
             startGameButton.setVisible(true);
             //createLobbyButton.setVisible(false);
-            joinLobbyButton.setVisible(false);
-            leaveLobbyButton.setVisible(true);
+            //joinLobbyButton.setVisible(false);
+            //leaveLobbyButton.setVisible(true);
         });
 
         joinLobbyButton.addActionListener(e -> {
             String username = usernameField.getText();
             try {
-                caller.joinLobby(new Client(usernameField.getText(),TEMPORARY_PORT), 8080);
+                caller.joinLobby(new Client(usernameField.getText(), Integer.parseInt(portFetcher.getPort())), 8080);
             } catch (JsonProcessingException ex) {
                 throw new RuntimeException(ex);
             }
             System.out.println("Joined lobby as: " + username);
             //startGameButton.setVisible(true);
-            joinLobbyButton.setVisible(false);
+            //joinLobbyButton.setVisible(false);
             leaveLobbyButton.setVisible(true);
         });
 
         startGameButton.addActionListener(e -> {
             try {
-                caller.startGame(new Client(usernameField.getText(), TEMPORARY_PORT), 8080);
+                caller.startGame(new Client(usernameField.getText(), Integer.parseInt(portFetcher.getPort())), 8080);
             } catch (JsonProcessingException ex) {
                 throw new RuntimeException(ex);
             }
@@ -144,7 +160,7 @@ public class AlcatrazGui {
 
         leaveLobbyButton.addActionListener(e -> {
             try {
-                caller.leaveLobby(new Client(usernameField.getText(), TEMPORARY_PORT), 8080);
+                caller.leaveLobby(new Client(usernameField.getText(), Integer.parseInt(portFetcher.getPort())), 8080);
             } catch (JsonProcessingException ex) {
                 throw new RuntimeException(ex);
             }
@@ -152,6 +168,10 @@ public class AlcatrazGui {
             leaveLobbyButton.setVisible(false);
             System.out.println("Left lobby");
         });
+    }
+
+    public static void main(String[] args) {
+
     }
 
     // Methode für konsistente Button-Stilierung

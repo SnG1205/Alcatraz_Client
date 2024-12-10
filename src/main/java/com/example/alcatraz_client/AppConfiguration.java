@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.EnvironmentAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.core.env.Environment;
 
 @Configuration
@@ -14,6 +15,7 @@ public class AppConfiguration  implements EnvironmentAware {
     private Environment env;
 
     @Bean
+    @Primary
     public PortFetcher getPortFetcher() {
         return new PortFetcher(env);
     }
