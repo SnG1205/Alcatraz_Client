@@ -1,10 +1,10 @@
 package com.example.alcatraz_client.data;
 
-public class Player {
+public class Client {
     private String username;
     private int port;
 
-    public Player(String username, int port) {
+    public Client(String username, int port) {
         this.username = username;
         this.port = port;
     }
