@@ -2,9 +2,6 @@ package com.example.alcatraz_client.game;
 
 import at.falb.games.alcatraz.api.Alcatraz;
 import at.falb.games.alcatraz.api.IllegalMoveException;
-import at.falb.games.alcatraz.api.MoveListener;
-import at.falb.games.alcatraz.api.Player;
-import at.falb.games.alcatraz.api.Prisoner;
 import com.example.alcatraz_client.PortFetcher;
 import com.example.alcatraz_client.data.Client;
 import com.example.alcatraz_client.data.RestMove;
@@ -19,7 +16,7 @@ import java.util.List;
 public class AlcatrazLogic  {
 
     @Autowired
-    private PortFetcher portFetcher; //Todo probably doesn`t work properly
+    private PortFetcher portFetcher;
 
     Alcatraz a = new Alcatraz();
     Caller c = new Caller(); //Todo mb delete later
@@ -43,7 +40,7 @@ public class AlcatrazLogic  {
     public void makeMove(RestMove move) {
         try{
             int playerId = move.getPlayerId();
-            a.doMove(a.getPlayer(playerId), a.getPrisoner(move.getPrisonerId() + 4*playerId), move.getRowOrCol(), move.getRow(), move.getCol());
+            a.doMove(a.getPlayer(playerId), a.getPrisoner(move.getPrisonerId() + 4 * playerId), move.getRowOrCol(), move.getRow(), move.getCol());
             System.out.println("Player" + a.getPlayer(move.getPlayerId()).getName() + "is" + "moving " + a.getPrisoner(move.getPrisonerId()));
         }
         catch (IllegalMoveException e) {
