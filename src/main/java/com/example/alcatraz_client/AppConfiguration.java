@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.core.env.Environment;
 
 @Configuration
-public class AppConfiguration  implements EnvironmentAware{
+public class AppConfiguration implements EnvironmentAware {
 
     @Autowired
     private WebServerApplicationContext webServerApplicationContext;

@@ -16,7 +16,7 @@ public class PortStartupRunner implements ApplicationListener<ApplicationReadyEv
         this.context = context;
     }
 
-    public int getPort(){
+    public int getPort() {
         return port;
     }
 

@@ -128,7 +128,7 @@ public class AlcatrazGui {
             try {
                 //caller.testConnection();
                 String response = caller.createLobby(new Client(usernameField.getText(), port), ports, Integer.parseInt(amountField.getText()));
-                if(response.equals("Lobby was successfully created")){
+                if (response.equals("Lobby was successfully created")) {
                     System.out.println("Lobby created by: " + username);
                     startGameButton.setVisible(true);
                     createLobbyButton.setVisible(false);
@@ -147,23 +147,21 @@ public class AlcatrazGui {
         });
 
         joinLobbyButton.addActionListener(e -> {
-            String username = usernameField.getText();
             try {
                 String response = caller.joinLobby(new Client(usernameField.getText(), port), ports);
-                if(response.equals("Player was added successfully")) {
+                if (response.equals("Player was added successfully")) {
                     createLobbyButton.setVisible(false);
                     joinLobbyButton.setVisible(false);
                     startGameButton.setVisible(true);
                     leaveLobbyButton.setVisible(true);
                     amountLabel.setVisible(false);
                     amountField.setVisible(false);
-                }
-                else if (response.isEmpty()) {
+                } else if (response.isEmpty()) {
                     System.out.println("No servers are running right now");
                 }
             } catch (JsonProcessingException ex) {
                 throw new RuntimeException(ex);
-            } catch (Exception er){
+            } catch (Exception er) {
                 System.out.println("Not joined the lobby");
             }
             //startGameButton.setVisible(false);
@@ -171,8 +169,8 @@ public class AlcatrazGui {
 
         startGameButton.addActionListener(e -> {
             try {
-                String response  = caller.startGame(new Client(usernameField.getText(), port), ports);
-                if(response.isEmpty()){
+                String response = caller.startGame(new Client(usernameField.getText(), port), ports);
+                if (response.isEmpty()) {
                     System.out.println("No servers are running right now");
                 } else if (!response.equals("You are not an owner of the lobby") && !response.equals("Lobby is not full yet")) {
                     usernameField.setText("");
@@ -182,8 +180,7 @@ public class AlcatrazGui {
                     leaveLobbyButton.setVisible(false);
                     startGameButton.setVisible(false);
                     System.out.println("Game started!");
-                }
-                else {
+                } else {
                     System.out.println(response);
                 }
             } catch (JsonProcessingException ex) {
@@ -194,15 +191,14 @@ public class AlcatrazGui {
         leaveLobbyButton.addActionListener(e -> {
             try {
                 String response = caller.leaveLobby(new Client(usernameField.getText(), port), ports);
-                if (response.equals("Successfully left lobby")){
+                if (response.equals("Successfully left lobby")) {
                     createLobbyButton.setVisible(true);
                     joinLobbyButton.setVisible(true);
                     leaveLobbyButton.setVisible(false);
                     amountLabel.setVisible(true);
                     amountField.setVisible(true);
                     System.out.println("Left lobby");
-                }
-                else{
+                } else {
                     System.out.println("No server is running right now");
                 }
             } catch (JsonProcessingException ex) {

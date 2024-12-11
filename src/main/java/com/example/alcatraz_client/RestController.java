@@ -23,7 +23,7 @@ public class RestController {
     }
 
     @PostMapping("/move")
-    public String moveClients(@RequestBody RestMove move){
+    public String moveClients(@RequestBody RestMove move) {
         alcatrazLogic.makeMove(move);
         return "Moved successfully";
     }

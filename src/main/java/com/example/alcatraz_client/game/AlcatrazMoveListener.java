@@ -12,6 +12,7 @@ public class AlcatrazMoveListener implements MoveListener {
     private List<Client> clients;
     private Alcatraz a;
     private Caller caller = new Caller();
+
     public AlcatrazMoveListener(List<Client> clients, Alcatraz a) {
         this.clients = clients;
         this.a = a;
@@ -19,7 +20,7 @@ public class AlcatrazMoveListener implements MoveListener {
 
     @Override
     public void moveDone(Player player, Prisoner prisoner, int rowOrCol, int row, int col) {
-        System.out.println("Player" + player.getName()+ "is" +"moving " + prisoner + " to " + (rowOrCol == Alcatraz.ROW ? "row" : "col") + " " + (rowOrCol == Alcatraz.ROW ? row : col));
+        System.out.println("Player" + player.getName() + "is" + "moving " + prisoner + " to " + (rowOrCol == Alcatraz.ROW ? "row" : "col") + " " + (rowOrCol == Alcatraz.ROW ? row : col));
         List<Client> otherClients = clients.stream().filter(client -> !client.getUsername().equals(player.getName())).toList();
         RestMove move = new RestMove(player.getId(), prisoner.getId(), rowOrCol, row, col);
         otherClients.forEach(otherClient -> {

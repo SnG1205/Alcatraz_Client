@@ -13,21 +13,6 @@ public class Caller {
     private final OkHttpClient httpClient = new OkHttpClient();
     private final JsonConverter jsonConverter = new JsonConverter();
 
-    public void testConnection() {
-        Request request = new Request.Builder()
-                //.url(BASE_URL + port)
-                .url("https://jsonplaceholder.typicode.com/posts")
-                .get()
-                .build();
-        try{
-            Response response = httpClient.newCall(request).execute();
-            System.out.println(response.body().string());
-        }
-        catch (Exception e){
-            System.out.println(e);
-        }
-    }
-
     public String createLobby(Client client, List<Integer> ports, int amountOfPlayers) throws JsonProcessingException {
         String json = jsonConverter.toJson(client);
         for (Integer port : ports) {
@@ -39,17 +24,15 @@ public class Caller {
                     .build();
             RequestBody body = RequestBody.create(json, JSON);
             Request request = new Request.Builder()
-                    //.url(BASE_URL + port)
                     .url(httpUrl)
                     .post(body)
                     .build();
-            try{
+            try {
                 Response response = httpClient.newCall(request).execute();
                 String s = response.body().string();
                 System.out.println(s);
                 return s;
-            }
-            catch (Exception e){
+            } catch (Exception e) {
                 System.out.println(e);
             }
         }
@@ -67,17 +50,15 @@ public class Caller {
                     .build();
             RequestBody body = RequestBody.create(json, JSON);
             Request request = new Request.Builder()
-                    //.url(BASE_URL + port)
                     .url(httpUrl)
                     .post(body)
                     .build();
-            try{
+            try {
                 Response response = httpClient.newCall(request).execute();
-                String  s = response.body().string();
+                String s = response.body().string();
                 System.out.println(s);
                 return s;
-            }
-            catch (Exception e){
+            } catch (Exception e) {
                 System.out.println(e);
             }
         }
@@ -86,7 +67,7 @@ public class Caller {
 
     public String startGame(Client client, List<Integer> ports) throws JsonProcessingException { //Todo refactor
         String json = jsonConverter.toJson(client);
-        for(Integer port : ports) {
+        for (Integer port : ports) {
             HttpUrl httpUrl = new HttpUrl.Builder()
                     .scheme("http")
                     .host("127.0.0.1")
@@ -96,16 +77,14 @@ public class Caller {
                     .build();
             RequestBody body = RequestBody.create(json, JSON);
             Request request = new Request.Builder()
-                    //.url(BASE_URL + port)
                     .url(httpUrl)
                     .post(body)
                     .build();
-            try{
+            try {
                 Response response = httpClient.newCall(request).execute();
                 String s = response.body().string();
                 return s;
-            }
-            catch (Exception e){
+            } catch (Exception e) {
                 System.out.println(e);
             }
         }
@@ -122,17 +101,15 @@ public class Caller {
                     .addQueryParameter("username", client.getUsername())
                     .build();
             Request request = new Request.Builder()
-                    //.url(BASE_URL + port)
                     .url(httpUrl)
                     .delete()
                     .build();
-            try{
+            try {
                 Response response = httpClient.newCall(request).execute();
                 String s = response.body().string();
                 System.out.println(s);
                 return s;
-            }
-            catch (Exception e){
+            } catch (Exception e) {
                 System.out.println(e);
             }
         }
@@ -149,15 +126,13 @@ public class Caller {
                 .build();
         RequestBody body = RequestBody.create(json, JSON);
         Request request = new Request.Builder()
-                //.url(BASE_URL + port)
                 .url(httpUrl)
                 .post(body)
                 .build();
-        try{
+        try {
             Response response = httpClient.newCall(request).execute();
             System.out.println(response.body().string());
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             System.out.println(e);
         }
     }
