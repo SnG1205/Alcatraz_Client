@@ -9,12 +9,14 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.List;
 
 @Component
 public class AlcatrazGui {
 
     public static void drawBoard(int port) {
         Caller caller = new Caller();
+        List<Integer> ports = List.of(8080, 8081, 8082);
         // Hauptfenster erstellen
         JFrame frame = new JFrame("Escape from Alcatraz");
         frame.setSize(600, 400); // Fenstergröße
@@ -124,48 +126,88 @@ public class AlcatrazGui {
         createLobbyButton.addActionListener(e -> {
             String username = usernameField.getText();
             try {
-                caller.createLobby(new Client(usernameField.getText(), port), 8080, Integer.parseInt(amountField.getText()));
+                //caller.testConnection();
+                String response = caller.createLobby(new Client(usernameField.getText(), port), ports, Integer.parseInt(amountField.getText()));
+                if(response.equals("Lobby was successfully created")){
+                    System.out.println("Lobby created by: " + username);
+                    startGameButton.setVisible(true);
+                    createLobbyButton.setVisible(false);
+                    joinLobbyButton.setVisible(false);
+                    leaveLobbyButton.setVisible(true);
+                    amountLabel.setVisible(false);
+                    amountField.setVisible(false);
+                } else if (response.isEmpty()) {
+                    System.out.println("No servers are running right now");
+                } else {
+                    System.out.println(response);
+                }
             } catch (JsonProcessingException ex) { //Integer.parseInt(portFetcher.getPort())
                 throw new RuntimeException(ex);
             }
-            System.out.println("Lobby created by: " + username);
-            startGameButton.setVisible(true);
-            //createLobbyButton.setVisible(false);
-            //joinLobbyButton.setVisible(false);
-            //leaveLobbyButton.setVisible(true);
         });
 
         joinLobbyButton.addActionListener(e -> {
             String username = usernameField.getText();
             try {
-                caller.joinLobby(new Client(usernameField.getText(), port), 8080);
+                String response = caller.joinLobby(new Client(usernameField.getText(), port), ports);
+                if(response.equals("Player was added successfully")) {
+                    createLobbyButton.setVisible(false);
+                    joinLobbyButton.setVisible(false);
+                    startGameButton.setVisible(true);
+                    leaveLobbyButton.setVisible(true);
+                    amountLabel.setVisible(false);
+                    amountField.setVisible(false);
+                }
+                else if (response.isEmpty()) {
+                    System.out.println("No servers are running right now");
+                }
             } catch (JsonProcessingException ex) {
                 throw new RuntimeException(ex);
+            } catch (Exception er){
+                System.out.println("Not joined the lobby");
             }
-            System.out.println("Joined lobby as: " + username);
-            //startGameButton.setVisible(true);
-            //joinLobbyButton.setVisible(false);
-            leaveLobbyButton.setVisible(true);
+            //startGameButton.setVisible(false);
         });
 
         startGameButton.addActionListener(e -> {
             try {
-                caller.startGame(new Client(usernameField.getText(), port), 8080);
+                String response  = caller.startGame(new Client(usernameField.getText(), port), ports);
+                if(response.isEmpty()){
+                    System.out.println("No servers are running right now");
+                } else if (!response.equals("You are not an owner of the lobby") && !response.equals("Lobby is not full yet")) {
+                    usernameField.setText("");
+                    amountField.setText("");
+                    createLobbyButton.setVisible(true);
+                    joinLobbyButton.setVisible(true);
+                    leaveLobbyButton.setVisible(false);
+                    startGameButton.setVisible(false);
+                    System.out.println("Game started!");
+                }
+                else {
+                    System.out.println(response);
+                }
             } catch (JsonProcessingException ex) {
                 throw new RuntimeException(ex);
             }
-            System.out.println("Game started!");
         });
 
         leaveLobbyButton.addActionListener(e -> {
             try {
-                caller.leaveLobby(new Client(usernameField.getText(), port), 8080);
+                String response = caller.leaveLobby(new Client(usernameField.getText(), port), ports);
+                if (response.equals("Successfully left lobby")){
+                    createLobbyButton.setVisible(true);
+                    joinLobbyButton.setVisible(true);
+                    leaveLobbyButton.setVisible(false);
+                    amountLabel.setVisible(true);
+                    amountField.setVisible(true);
+                    System.out.println("Left lobby");
+                }
+                else{
+                    System.out.println("No server is running right now");
+                }
             } catch (JsonProcessingException ex) {
                 throw new RuntimeException(ex);
             }
-            joinLobbyButton.setVisible(true);
-            leaveLobbyButton.setVisible(false);
-            System.out.println("Left lobby");
         });
     }
 

@@ -20,17 +20,6 @@ public class AlcatrazMoveListener implements MoveListener {
     @Override
     public void moveDone(Player player, Prisoner prisoner, int rowOrCol, int row, int col) {
         System.out.println("Player" + player.getName()+ "is" +"moving " + prisoner + " to " + (rowOrCol == Alcatraz.ROW ? "row" : "col") + " " + (rowOrCol == Alcatraz.ROW ? row : col));
-        /*System.out.println("moving " + prisoner + " to " + (rowOrCol == Alcatraz.ROW ? "row" : "col") + " " + (rowOrCol == Alcatraz.ROW ? row : col));
-        try {
-            a.doMove(a.getPlayer(player.getId()), a.getPrisoner(prisoner.getId()), rowOrCol, row, col);
-            //Execute Post requests with Okhttp;
-        }
-        catch (IllegalMoveException e) {
-            e.printStackTrace();
-        }
-        for (Client c : clients) {
-
-        }*/
         List<Client> otherClients = clients.stream().filter(client -> !client.getUsername().equals(player.getName())).toList();
         RestMove move = new RestMove(player.getId(), prisoner.getId(), rowOrCol, row, col);
         otherClients.forEach(otherClient -> {
@@ -45,5 +34,6 @@ public class AlcatrazMoveListener implements MoveListener {
     @Override
     public void gameWon(Player player) {
         System.out.println("Player " + player.getId() + " wins.");
+        //a.closeWindow();
     }
 }

@@ -1,6 +1,5 @@
 package com.example.alcatraz_client;
 
-import at.falb.games.alcatraz.api.Alcatraz;
 import com.example.alcatraz_client.data.Client;
 import com.example.alcatraz_client.data.RestMove;
 import com.example.alcatraz_client.game.AlcatrazLogic;
@@ -9,13 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @org.springframework.web.bind.annotation.RestController
 public class RestController {
 
-    //private AlcatrazLogic alcatrazLogic = new AlcatrazLogic();
     @Autowired
     private AlcatrazLogic alcatrazLogic;
 
@@ -30,8 +27,4 @@ public class RestController {
         alcatrazLogic.makeMove(move);
         return "Moved successfully";
     }
-
-    /*public List<Client> getPlayers() {
-        return clients;
-    }*/
 }
